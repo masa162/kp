@@ -11,7 +11,7 @@ binding = "DB"
 database_name = "kj-db"
 database_id = "063a7566-fb55-4b47-afa0-d3a7f76bbf69"
 
-# Cloudflare R2 Bucket
+# Cloudflare R2 Bucket (kj-audioを再利用)
 [[r2_buckets]]
 binding = "R2"
-bucket_name = "kp-audio"
+bucket_name = "kj-audio"
