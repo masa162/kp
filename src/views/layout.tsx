@@ -13,6 +13,10 @@ export const Layout = ({ title, children, lang = 'ja' }: LayoutProps) => {
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title} - 古医術研究所</title>
+        <meta name="description" content="傷寒論・金匱要略・黄帝内経など、東洋医学の古典を学ぶための学習プラットフォーム" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;600;700;900&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="/styles.css" />
         <script src="https://unpkg.com/htmx.org@2.0.3"></script>
       </head>

@@ -19,34 +19,47 @@ const formatDuration = (seconds: number): string => {
 export const ChapterDetailPage = ({ chapter, text, slug }: ChapterDetailProps) => {
   return (
     <Layout title={`${chapter.title_jp} - ${text.title_jp}`}>
-      <div class="container mx-auto px-4 py-12 max-w-4xl">
-        {/* パンくずナビゲーション */}
-        <nav class="mb-8 text-sm">
-          <a href="/" class="text-matcha hover:text-matcha-dark transition-colors">
-            ← 古典一覧
-          </a>
-          <span class="mx-2 text-sumi/40">/</span>
-          <a href={`/texts/${slug}`} class="text-matcha hover:text-matcha-dark transition-colors">
-            {text.title_jp}
-          </a>
-          <span class="mx-2 text-sumi/40">/</span>
-          <span class="text-sumi/60">{chapter.title_jp}</span>
-        </nav>
+      {/* ヘッダーセクション */}
+      <div class="bg-gradient-to-br from-washi via-kinari to-washi border-b-4 border-matcha">
+        <div class="container mx-auto px-4 py-10 max-w-4xl">
+          {/* パンくずナビゲーション */}
+          <nav class="mb-6 text-sm flex items-center gap-2 flex-wrap">
+            <a href="/" class="inline-flex items-center gap-1 text-matcha hover:text-matcha-dark transition-colors font-medium">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              古典一覧
+            </a>
+            <svg class="w-4 h-4 text-sumi/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <a href={`/texts/${slug}`} class="text-matcha hover:text-matcha-dark transition-colors font-medium">
+              {text.title_jp}
+            </a>
+            <svg class="w-4 h-4 text-sumi/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <span class="text-sumi/70 font-medium">{chapter.title_jp}</span>
+          </nav>
 
-        {/* 章タイトル */}
-        <div class="mb-8">
-          <div class="flex items-center gap-4 mb-4">
-            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-matcha text-white font-bold text-lg">
+          {/* 章タイトル */}
+          <div class="flex items-start gap-5">
+            <span class="flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-matcha to-matcha-dark text-white font-bold text-2xl shadow-xl flex-shrink-0">
               {chapter.chapter_order}
             </span>
-            <h1 class="text-4xl font-bold font-serif text-sumi">
-              {chapter.title_jp}
-            </h1>
+            <div class="flex-1">
+              <h1 class="text-4xl md:text-5xl font-bold font-serif text-sumi leading-tight mb-3">
+                {chapter.title_jp}
+              </h1>
+              {chapter.title_en && (
+                <p class="text-lg text-matcha-dark opacity-80 font-medium">{chapter.title_en}</p>
+              )}
+            </div>
           </div>
-          {chapter.title_en && (
-            <p class="text-lg text-sumi/60 ml-16">{chapter.title_en}</p>
-          )}
         </div>
+      </div>
+
+      <div class="container mx-auto px-4 py-12 max-w-4xl">
 
         {/* 音声プレーヤー */}
         {chapter.audio_url && (
@@ -79,12 +92,14 @@ export const ChapterDetailPage = ({ chapter, text, slug }: ChapterDetailProps) =
         )}
 
         {/* 本文 */}
-        <div class="bg-white border-2 border-washi-dark rounded-xl p-8 shadow-sm">
-          <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-matcha/20">
-            <svg class="w-6 h-6 text-matcha" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-            </svg>
-            <h2 class="text-2xl font-bold text-sumi font-serif">本文</h2>
+        <div class="bg-gradient-to-br from-white to-kinari/20 border-2 border-matcha-light rounded-2xl p-10 shadow-xl">
+          <div class="flex items-center gap-3 mb-8 pb-6 border-b-2 border-matcha/20">
+            <div class="p-2 bg-matcha/10 rounded-lg">
+              <svg class="w-7 h-7 text-matcha" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-sumi font-serif">本文</h2>
           </div>
 
           {chapter.content_jp ? (
@@ -117,15 +132,15 @@ export const ChapterDetailPage = ({ chapter, text, slug }: ChapterDetailProps) =
         </div>
 
         {/* ナビゲーションボタン */}
-        <div class="mt-12 flex justify-center">
+        <div class="mt-16 flex justify-center">
           <a
             href={`/texts/${slug}`}
-            class="inline-flex items-center gap-2 px-8 py-4 bg-matcha text-white font-bold rounded-lg hover:bg-matcha-dark transition-all duration-300 hover:scale-105 shadow-lg"
+            class="group inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-matcha to-matcha-dark text-white font-bold rounded-2xl hover:shadow-2xl transition-all duration-500 hover:scale-110 shadow-xl"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            <svg class="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
             </svg>
-            章一覧に戻る
+            <span class="text-lg">章一覧に戻る</span>
           </a>
         </div>
       </div>

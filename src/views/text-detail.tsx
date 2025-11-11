@@ -11,25 +11,37 @@ interface TextDetailProps {
 export const TextDetailPage = ({ text, chapters }: TextDetailProps) => {
   return (
     <Layout title={text.title_jp}>
-      <div class="container mx-auto px-4 py-12 max-w-5xl">
-        {/* ヘッダー */}
-        <div class="mb-8">
-          <nav class="text-sm mb-4">
-            <a href="/" class="text-matcha hover:text-matcha-dark transition-colors">
-              ← 古典一覧に戻る
+      {/* ヘッダーセクション */}
+      <div class="bg-gradient-to-br from-washi via-kinari to-washi border-b-4 border-matcha">
+        <div class="container mx-auto px-4 py-12 max-w-5xl">
+          <nav class="text-sm mb-6">
+            <a href="/" class="inline-flex items-center gap-2 text-matcha hover:text-matcha-dark transition-colors font-medium">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              古典一覧に戻る
             </a>
           </nav>
 
-          <h1 class="text-5xl font-bold mb-4 font-serif text-sumi border-l-4 border-matcha pl-4">
-            {text.title_jp}
-          </h1>
-
-          {text.description_jp && (
-            <p class="text-lg text-sumi leading-relaxed opacity-80 pl-5">
-              {text.description_jp}
-            </p>
-          )}
+          <div class="relative">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 font-serif text-sumi leading-tight">
+              {text.title_jp}
+            </h1>
+            {text.title_en && (
+              <p class="text-xl text-matcha-dark opacity-80 mb-6 font-medium tracking-wide">
+                {text.title_en}
+              </p>
+            )}
+            {text.description_jp && (
+              <p class="text-lg text-sumi leading-relaxed opacity-80 max-w-3xl">
+                {text.description_jp}
+              </p>
+            )}
+          </div>
         </div>
+      </div>
+
+      <div class="container mx-auto px-4 py-12 max-w-5xl">
 
         {/* 章一覧 */}
         <div class="bg-washi rounded-lg p-6">
@@ -46,49 +58,63 @@ export const TextDetailPage = ({ text, chapters }: TextDetailProps) => {
               <p class="text-sm">準備中です</p>
             </div>
           ) : (
-            <div class="space-y-3">
+            <div class="space-y-4">
               {chapters.map((chapter, index) => (
                 <a
                   key={chapter.id}
                   href={`/texts/${text.slug}/chapters/${chapter.id}`}
-                  class="group block bg-white border-2 border-matcha-light hover:border-matcha rounded-lg p-5 transition-all duration-300 hover:shadow-lg hover:translate-x-2"
+                  class="group block relative bg-gradient-to-r from-white to-kinari/30 border-2 border-matcha-light hover:border-matcha rounded-xl p-6 transition-all duration-500 hover:shadow-2xl hover:translate-x-3 overflow-hidden"
                 >
-                  <div class="flex items-start justify-between">
+                  {/* 背景装飾 */}
+                  <div class="absolute top-0 right-0 w-32 h-32 bg-matcha/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700"></div>
+
+                  <div class="flex items-start justify-between relative">
                     <div class="flex-1">
-                      <div class="flex items-center gap-3 mb-2">
+                      <div class="flex items-center gap-4 mb-3">
                         {/* 章番号バッジ */}
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-matcha text-white text-sm font-bold">
-                          {index + 1}
+                        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-matcha to-matcha-dark text-white text-lg font-bold shadow-lg group-hover:scale-110 transition-transform">
+                          {chapter.chapter_order}
                         </span>
 
-                        <h3 class="text-xl font-bold font-serif text-sumi group-hover:text-shu transition-colors">
-                          {chapter.title_jp}
-                        </h3>
+                        <div class="flex-1">
+                          <h3 class="text-2xl font-bold font-serif text-sumi group-hover:text-shu transition-colors leading-tight mb-1">
+                            {chapter.title_jp}
+                          </h3>
+                          {chapter.title_en && (
+                            <p class="text-sm text-matcha-dark opacity-70 font-medium">
+                              {chapter.title_en}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
                       {/* コンテンツプレビュー */}
                       {chapter.content_jp && (
-                        <p class="text-sm text-sumi opacity-70 line-clamp-2 ml-11">
-                          {chapter.content_jp.substring(0, 100)}...
+                        <p class="text-sm text-sumi opacity-70 line-clamp-2 ml-16 leading-relaxed">
+                          {chapter.content_jp.substring(0, 150)}...
                         </p>
                       )}
+
+                      {/* タグ */}
+                      <div class="flex gap-2 mt-4 ml-16">
+                        {chapter.audio_url && (
+                          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-matcha/10 text-matcha-dark rounded-full text-xs font-medium">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
+                            </svg>
+                            音声あり
+                            {chapter.duration_seconds > 0 && (
+                              <span class="ml-1">{Math.floor(chapter.duration_seconds / 60)}:{(chapter.duration_seconds % 60).toString().padStart(2, '0')}</span>
+                            )}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
-                    {/* 音声情報 & アイコン */}
-                    <div class="flex flex-col items-end gap-2 ml-4">
-                      {chapter.audio_url && (
-                        <div class="flex items-center gap-2 text-sm text-matcha-dark">
-                          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
-                          </svg>
-                          {chapter.duration_seconds > 0 && (
-                            <span>{Math.floor(chapter.duration_seconds / 60)}:{(chapter.duration_seconds % 60).toString().padStart(2, '0')}</span>
-                          )}
-                        </div>
-                      )}
-
-                      <svg class="w-6 h-6 text-matcha-dark group-hover:text-shu group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    {/* 矢印アイコン */}
+                    <div class="ml-6">
+                      <svg class="w-8 h-8 text-matcha group-hover:text-shu group-hover:translate-x-2 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
                   </div>
@@ -100,24 +126,24 @@ export const TextDetailPage = ({ text, chapters }: TextDetailProps) => {
 
         {/* 統計情報 */}
         {chapters.length > 0 && (
-          <div class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div class="bg-kinari rounded-lg p-4 text-center border border-matcha-light">
-              <div class="text-3xl font-bold text-matcha">{chapters.length}</div>
-              <div class="text-sm text-sumi opacity-70">章</div>
+          <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-gradient-to-br from-kinari to-washi rounded-2xl p-6 text-center border-2 border-matcha-light hover:border-matcha transition-all hover:shadow-xl group">
+              <div class="text-5xl font-bold text-matcha mb-2 group-hover:scale-110 transition-transform">{chapters.length}</div>
+              <div class="text-sm font-medium text-sumi opacity-70 uppercase tracking-wider">全章数</div>
             </div>
 
-            <div class="bg-kinari rounded-lg p-4 text-center border border-matcha-light">
-              <div class="text-3xl font-bold text-matcha">
+            <div class="bg-gradient-to-br from-kinari to-washi rounded-2xl p-6 text-center border-2 border-matcha-light hover:border-matcha transition-all hover:shadow-xl group">
+              <div class="text-5xl font-bold text-matcha mb-2 group-hover:scale-110 transition-transform">
                 {chapters.filter(c => c.audio_url).length}
               </div>
-              <div class="text-sm text-sumi opacity-70">音声あり</div>
+              <div class="text-sm font-medium text-sumi opacity-70 uppercase tracking-wider">音声収録済</div>
             </div>
 
-            <div class="bg-kinari rounded-lg p-4 text-center border border-matcha-light">
-              <div class="text-3xl font-bold text-matcha">
+            <div class="bg-gradient-to-br from-kinari to-washi rounded-2xl p-6 text-center border-2 border-matcha-light hover:border-matcha transition-all hover:shadow-xl group">
+              <div class="text-5xl font-bold text-matcha mb-2 group-hover:scale-110 transition-transform">
                 {Math.floor(chapters.reduce((sum, c) => sum + c.duration_seconds, 0) / 60)}
               </div>
-              <div class="text-sm text-sumi opacity-70">合計分数</div>
+              <div class="text-sm font-medium text-sumi opacity-70 uppercase tracking-wider">合計分数</div>
             </div>
           </div>
         )}
