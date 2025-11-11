@@ -1,15 +1,25 @@
 /** @jsxImportSource hono/jsx */
 
 import { Hono } from 'hono'
+import { readFileSync } from 'fs'
 import type { Bindings, Variables } from './types/bindings'
 import { Database } from './lib/db'
 import { HomePage } from './views/home'
 import { TextDetailPage } from './views/text-detail'
 import { ChapterDetailPage } from './views/chapter-detail'
 
+// CSSファイルをビルド時に読み込み
+const cssContent = readFileSync('./public/styles.css', 'utf-8')
+
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
-// 静的ファイルはCloudflare Workers Assetsによって自動配信される
+// CSS配信（インライン）
+app.get('/styles.css', (c) => {
+  return c.text(cssContent, 200, {
+    'Content-Type': 'text/css; charset=utf-8',
+    'Cache-Control': 'public, max-age=31536000, immutable',
+  })
+})
 
 // ホームページ
 app.get('/', async (c) => {
