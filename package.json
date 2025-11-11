@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "dev": "npm run build:css && wrangler dev",
+    "deploy": "npm run build:css && wrangler deploy",
     "build:css": "tailwindcss -i ./src/styles/input.css -o ./public/styles.css --minify",
     "watch:css": "tailwindcss -i ./src/styles/input.css -o ./public/styles.css --watch"
   },

@@ -1,7 +1,6 @@
 /** @jsxImportSource hono/jsx */
 
 import { Hono } from 'hono'
-import { serveStatic } from 'hono/cloudflare-workers'
 import type { Bindings, Variables } from './types/bindings'
 import { Database } from './lib/db'
 import { HomePage } from './views/home'
@@ -10,8 +9,7 @@ import { ChapterDetailPage } from './views/chapter-detail'
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
-// 静的ファイル配信
-app.get('/styles.css', serveStatic({ path: './styles.css' }))
+// 静的ファイルはCloudflare Workers Assetsによって自動配信される
 
 // ホームページ
 app.get('/', async (c) => {
