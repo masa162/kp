@@ -1,24 +1,34 @@
 /** @jsxImportSource hono/jsx */
 
 import { Hono } from 'hono'
-import { readFileSync } from 'fs'
+import { getAssetFromKV } from '@cloudflare/kv-asset-handler'
 import type { Bindings, Variables } from './types/bindings'
 import { Database } from './lib/db'
 import { HomePage } from './views/home'
 import { TextDetailPage } from './views/text-detail'
 import { ChapterDetailPage } from './views/chapter-detail'
+import manifestJSON from '__STATIC_CONTENT_MANIFEST'
 
-// CSSファイルをビルド時に読み込み
-const cssContent = readFileSync('./public/styles.css', 'utf-8')
+const assetManifest = JSON.parse(manifestJSON)
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
-// CSS配信（インライン）
-app.get('/styles.css', (c) => {
-  return c.text(cssContent, 200, {
-    'Content-Type': 'text/css; charset=utf-8',
-    'Cache-Control': 'public, max-age=31536000, immutable',
-  })
+// 静的ファイル配信（Workers Sites KV）
+app.get('/styles.css', async (c) => {
+  try {
+    return await getAssetFromKV(
+      {
+        request: c.req.raw,
+        waitUntil: c.executionCtx.waitUntil.bind(c.executionCtx),
+      },
+      {
+        ASSET_NAMESPACE: c.env.__STATIC_CONTENT,
+        ASSET_MANIFEST: assetManifest,
+      }
+    )
+  } catch (e) {
+    return c.text('File not found', 404)
+  }
 })
 
 // ホームページ
