@@ -5,6 +5,7 @@ import { serveStatic } from 'hono/cloudflare-workers'
 import type { Bindings, Variables } from './types/bindings'
 import { Database } from './lib/db'
 import { HomePage } from './views/home'
+import { TextDetailPage } from './views/text-detail'
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
@@ -31,21 +32,7 @@ app.get('/texts/:slug', async (c) => {
 
   const chapters = await db.getChaptersByTextId(text.id)
 
-  return c.html(
-    <div>
-      <h1>{text.title_jp}</h1>
-      <p>{text.description_jp}</p>
-      <ul>
-        {chapters.map((chapter) => (
-          <li key={chapter.id}>
-            <a href={`/texts/${slug}/chapters/${chapter.id}`}>
-              {chapter.title_jp}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  return c.html(<TextDetailPage text={text} chapters={chapters} />)
 })
 
 // 章詳細ページ
