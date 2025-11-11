@@ -4,10 +4,18 @@ export type Bindings = {
   DB: D1Database
   R2: R2Bucket
   __STATIC_CONTENT: KVNamespace
+  JWT_SECRET: string // JWT署名用シークレット
+  ADMIN_USER_ID: string // 管理者ユーザーID
+  ADMIN_PASSWORD_HASH: string // 管理者パスワードハッシュ
 }
 
 export type Variables = {
   user?: string
+  adminUser?: {
+    sub: string
+    role: string
+    exp: number
+  }
 }
 
 // データベーステーブル型
